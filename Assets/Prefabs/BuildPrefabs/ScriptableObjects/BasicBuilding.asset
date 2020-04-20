@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba90a7d0d0a896548a0bfab97918c5b7, type: 3}
+  m_Name: BasicBuilding
+  m_EditorClassIdentifier: 
+  baseObjects:
+  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  middleObjects:
+  - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  topObjects:
+  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  colourScheme1:
+  - {fileID: 2100000, guid: 86ae082780674754c87bf06db59a75f1, type: 2}
+  - {fileID: 2100000, guid: 5356e75849c4a3641be958760bf69b11, type: 2}
+  colourScheme2:
+  - {fileID: 2100000, guid: a0e64488f3f620a419f4d0bc85dc2a51, type: 2}
+  - {fileID: 2100000, guid: 8fc8c55086fe63c4ab2f6f0fa7a5f16e, type: 2}
+  colourScheme3:
+  - {fileID: 2100000, guid: 7fd09b69bf9bf5c408aff7b267e1308f, type: 2}
+  - {fileID: 2100000, guid: 6250b9e910cd9df459458b5742813563, type: 2}
+  maxHeight: 4
