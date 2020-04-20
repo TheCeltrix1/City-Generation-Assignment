@@ -42,6 +42,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+        public Vector3 grappleVelocity;
 
         // Use this for initialization
         private void Start()
@@ -126,6 +127,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_MoveDir += Physics.gravity*m_GravityMultiplier*Time.fixedDeltaTime;
             }
+            GrappleHook();
             m_CollisionFlags = m_CharacterController.Move(m_MoveDir*Time.fixedDeltaTime);
 
             ProgressStepCycle(speed);
@@ -134,6 +136,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MouseLook.UpdateCursorLock();
         }
 
+        public void GrappleHook()
+        {
+            if (grappleVelocity != Vector3.zero) {
+                m_MoveDir = grappleVelocity;
+            }
+        }
 
         private void PlayJumpSound()
         {
