@@ -10,6 +10,7 @@ public class BuildingScript : MonoBehaviour
     public GameObject thisObj;
     public Material centreMaterial;
     public float scale = 2;
+    public Quaternion rotation;
 
     private Renderer myRenderer;
     private Material myMaterial;
@@ -51,6 +52,7 @@ public class BuildingScript : MonoBehaviour
             {
                 myMaterial = centreMaterial;
             }
+            this.transform.rotation = rotation;
             CreateTile();
             Destroy(this);
         }
@@ -60,6 +62,7 @@ public class BuildingScript : MonoBehaviour
             matNum = structures.colourScheme3.Length;
             myMesh.mesh = structures.topObjects[Random.Range(0, objVal)];
             myMaterial = structures.colourScheme3[Random.Range(0, matNum)];
+            this.transform.rotation = rotation;
             CreateTile();
             Destroy(this);
         }
