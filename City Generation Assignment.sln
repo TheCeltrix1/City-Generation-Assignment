@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponents", "NavMeshComponents.csproj", "{6389E503-4F81-2193-2F9D-9ADF995BE42F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{341BDA5E-AE6B-87EE-28BD-51ADA835D6C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-firstpass", "Assembly-CSharp-firstpass.csproj", "{9C2B9369-1ADC-5031-63F5-C036DA897A80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponentsEditor", "NavMeshComponentsEditor.csproj", "{0A6FD0E3-486E-DAA6-1D4F-C0ACEA12B82A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponents", "NavMeshComponents.csproj", "{6389E503-4F81-2193-2F9D-9ADF995BE42F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor-firstpass", "Assembly-CSharp-Editor-firstpass.csproj", "{B57BF503-ECE0-D210-9227-BDB3A2A2517A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponentsEditor", "NavMeshComponentsEditor.csproj", "{0A6FD0E3-486E-DAA6-1D4F-C0ACEA12B82A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6389E503-4F81-2193-2F9D-9ADF995BE42F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6389E503-4F81-2193-2F9D-9ADF995BE42F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6389E503-4F81-2193-2F9D-9ADF995BE42F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6389E503-4F81-2193-2F9D-9ADF995BE42F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{341BDA5E-AE6B-87EE-28BD-51ADA835D6C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{341BDA5E-AE6B-87EE-28BD-51ADA835D6C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{341BDA5E-AE6B-87EE-28BD-51ADA835D6C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -29,14 +25,18 @@ Global
 		{9C2B9369-1ADC-5031-63F5-C036DA897A80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C2B9369-1ADC-5031-63F5-C036DA897A80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C2B9369-1ADC-5031-63F5-C036DA897A80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0A6FD0E3-486E-DAA6-1D4F-C0ACEA12B82A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A6FD0E3-486E-DAA6-1D4F-C0ACEA12B82A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A6FD0E3-486E-DAA6-1D4F-C0ACEA12B82A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A6FD0E3-486E-DAA6-1D4F-C0ACEA12B82A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6389E503-4F81-2193-2F9D-9ADF995BE42F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6389E503-4F81-2193-2F9D-9ADF995BE42F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6389E503-4F81-2193-2F9D-9ADF995BE42F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6389E503-4F81-2193-2F9D-9ADF995BE42F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B57BF503-ECE0-D210-9227-BDB3A2A2517A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B57BF503-ECE0-D210-9227-BDB3A2A2517A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B57BF503-ECE0-D210-9227-BDB3A2A2517A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B57BF503-ECE0-D210-9227-BDB3A2A2517A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A6FD0E3-486E-DAA6-1D4F-C0ACEA12B82A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A6FD0E3-486E-DAA6-1D4F-C0ACEA12B82A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A6FD0E3-486E-DAA6-1D4F-C0ACEA12B82A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A6FD0E3-486E-DAA6-1D4F-C0ACEA12B82A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
