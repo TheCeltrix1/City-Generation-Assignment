@@ -11,15 +11,21 @@ public class BuildingScript : MonoBehaviour
     public Material centreMaterial;
     public float scale = 2;
     public Quaternion rotation;
+    public int posX;
+    public int posY;
+    public int posZ;
 
     private Renderer myRenderer;
     private Material myMaterial;
     private MeshFilter myMesh;
     private GameObject _child;
     private Vector3[] _vertices;
+    private MANAGER.CityManager _manager;
 
     private void Generate()
     {
+        //Debug.Log(posX + " " + posY + " " + posZ);
+        _manager = FindObjectOfType<MANAGER.CityManager>();
         myRenderer = this.GetComponent<MeshRenderer>();
         myMesh = this.GetComponent<MeshFilter>();
         this.GetComponent<MeshCollider>().enabled = false;
@@ -77,9 +83,10 @@ public class BuildingScript : MonoBehaviour
         Mesh();
         //this.GetComponent<Rigidbody>().mass = scale * .75f;
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (myMesh.mesh.bounds.size.y/2), this.transform.position.z);
-        this.GetComponent<MeshCollider>().enabled = true;
-        this.gameObject.GetComponent<MeshCollider>().sharedMesh = myMesh.mesh;
-        this.gameObject.GetComponent<MeshCollider>().convex = true;
+        MeshCollider meshCol = this.GetComponent<MeshCollider>();
+        meshCol.enabled = true;
+        meshCol.sharedMesh = myMesh.mesh;
+        meshCol.convex = true;
         myRenderer.material = myMaterial;
         NextTile(thisObj);
     }
@@ -87,18 +94,18 @@ public class BuildingScript : MonoBehaviour
     private void Mesh()
     {
         _vertices = myMesh.mesh.vertices;
+        float meshScale = 1/myMesh.mesh.bounds.size.y;
         var vertices = new Vector3[_vertices.Length];
 
         for (var i = 0; i < vertices.Length; i++)
         {
             var vertex = _vertices[i];
-            vertex.x = vertex.x * scale;
-            vertex.y = vertex.y * scale;
-            vertex.z = vertex.z * scale;
+            vertex.x = vertex.x * scale * meshScale;
+            vertex.y = vertex.y * scale * meshScale;
+            vertex.z = vertex.z * scale * meshScale;
 
             vertices[i] = vertex;
         }
-
         myMesh.mesh.vertices = vertices;
         myMesh.mesh.RecalculateNormals();
         myMesh.mesh.RecalculateBounds();
@@ -112,14 +119,26 @@ public class BuildingScript : MonoBehaviour
 
     private void NextTile(GameObject obj)
     {
-        _child = Instantiate(obj, 
-            new Vector3(this.transform.position.x, 
-            this.transform.position.y + (this.gameObject.GetComponent<MeshRenderer>().bounds.size.y / 2), 
-            this.transform.position.z),
-            Quaternion.Euler(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z),this.transform);
-        if(centreMaterial != null) _child.GetComponent<BuildingScript>().centreMaterial = centreMaterial;
-        _child.GetComponent<BuildingScript>().currentHeight = currentHeight + 1;
-        _child.GetComponent<BuildingScript>().structures = structures;
-        _child.GetComponent<BuildingScript>().Build();
+        if (posY + 1 < MANAGER.CityManager.floorOccupied.GetLength(1) && !MANAGER.CityManager.floorOccupied[posX, posY + 1, posZ])
+        {
+            MANAGER.CityManager.floorOccupied[posX, posY + 1, posZ] = false;
+            _child = Instantiate(obj,
+                new Vector3(this.transform.position.x,
+                this.transform.position.y + (this.gameObject.GetComponent<MeshRenderer>().bounds.size.y / 2),
+                this.transform.position.z),
+                Quaternion.Euler(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z), this.transform);
+            BuildingScript bs = _child.GetComponent<BuildingScript>();
+            if (centreMaterial != null) bs.centreMaterial = centreMaterial;
+            bs.posX = posX;
+            bs.posY = posY + 1;
+            bs.posZ = posZ;
+            bs.currentHeight = currentHeight + 1;
+            bs.structures = structures;
+            bs.Build();
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 }
