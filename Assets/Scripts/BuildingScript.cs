@@ -14,6 +14,7 @@ public class BuildingScript : MonoBehaviour
     public int posX;
     public int posY;
     public int posZ;
+    public int maxHeight;
 
     private Renderer myRenderer;
     private Material myMaterial;
@@ -29,6 +30,7 @@ public class BuildingScript : MonoBehaviour
         myRenderer = this.GetComponent<MeshRenderer>();
         myMesh = this.GetComponent<MeshFilter>();
         this.GetComponent<MeshCollider>().enabled = false;
+        //structures.maxHeight = maxHeight;
     }
 
     public void Build()
@@ -45,7 +47,7 @@ public class BuildingScript : MonoBehaviour
             CreateTile();
             Destroy(this);
         }
-        else if (currentHeight < structures.maxHeight)
+        else if (currentHeight < maxHeight)
         {
             objVal = structures.middleObjects.Length;
             matNum = structures.colourScheme2.Length;
@@ -62,17 +64,30 @@ public class BuildingScript : MonoBehaviour
             CreateTile();
             Destroy(this);
         }
-        else if (currentHeight == structures.maxHeight)
+        else if (currentHeight == maxHeight)
         {
             objVal = structures.topObjects.Length;
             matNum = structures.colourScheme3.Length;
-            myMesh.mesh = structures.topObjects[Random.Range(0, objVal)];
-            myMaterial = structures.colourScheme3[Random.Range(0, matNum)];
+
+            if(Random.Range(0, 200) <= 1 && !MANAGER.CityManager.endPointSpawn)
+            {
+                if ((posX > 0 && posZ > 0 && posX < MANAGER.CityManager.floorOccupied.GetLength(0) - 1 && posZ < MANAGER.CityManager.floorOccupied.GetLength(2) - 1))
+                MANAGER.CityManager.endPointSpawn = true;
+                myMesh.mesh = MANAGER.CityManager.Instance.endPoint.GetComponent<MeshFilter>().sharedMesh;
+                myMaterial = structures.colourScheme3[Random.Range(0, matNum)];
+                Debug.Log(posX + " " + posY + " " + posZ);
+            }
+            else
+            {
+                myMesh.mesh = structures.topObjects[Random.Range(0, objVal)];
+                myMaterial = structures.colourScheme3[Random.Range(0, matNum)];
+            }
+
             this.transform.rotation = rotation;
             CreateTile();
             Destroy(this);
         }
-        else if (currentHeight > structures.maxHeight)
+        else if (currentHeight > maxHeight)
         {
             Destroy(this.gameObject);
         }

@@ -168,6 +168,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoadTest (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6725324238462779291, guid: 4bd84ddfeef642044b4fa292e1574600,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6725324238462779294, guid: 4bd84ddfeef642044b4fa292e1574600,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -176,7 +181,7 @@ PrefabInstance:
     - target: {fileID: 6725324238462779294, guid: 4bd84ddfeef642044b4fa292e1574600,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -20.83
       objectReference: {fileID: 0}
     - target: {fileID: 6725324238462779294, guid: 4bd84ddfeef642044b4fa292e1574600,
         type: 3}
@@ -230,12 +235,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4bd84ddfeef642044b4fa292e1574600, type: 3}
---- !u!1 &156983380 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6725324238462779291, guid: 4bd84ddfeef642044b4fa292e1574600,
-    type: 3}
-  m_PrefabInstance: {fileID: 156983379}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,7 +262,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 1
-  m_Color: {r: 0.2264151, g: 0.016019935, b: 0.13772666, a: 1}
+  m_Color: {r: 0.4245283, g: 0.046057325, b: 0.26332778, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -334,9 +333,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab0165d459e807042b2bc9dcf5f9a783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Buildings:
+  buildings:
   - {fileID: 3145880488716411293, guid: fd61409623794d74fbffbe8b754456e1, type: 3}
-  test: {fileID: 156983380}
+  roadF: {fileID: 8836882258093099551, guid: 87068aaa65d411c47804642785a2c2a1, type: 3}
+  roadS: {fileID: 3127570212299746201, guid: fb5e716c78622e54c84544e987a77ada, type: 3}
+  endPoint: {fileID: 7975536240380620361, guid: f29c0f1da11901545a88991aeea42f1f,
+    type: 3}
+  navMeshHolder: {fileID: 1327595785}
 --- !u!4 &671049974
 Transform:
   m_ObjectHideFlags: 0
@@ -429,7 +432,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1866673868
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -524,7 +527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.18
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalPosition.z

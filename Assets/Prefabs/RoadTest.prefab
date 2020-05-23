@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6725324238462779291}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.5, y: 1.5, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -105,7 +105,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c2fe14fe8fc5ed4b9ccb66240c61e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recursionCount: 0
   tilePrefab: {fileID: 6725324238462779294}
   slopeMesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
   flatMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
