@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba90a7d0d0a896548a0bfab97918c5b7, type: 3}
+  m_Name: Building2
+  m_EditorClassIdentifier: 
+  baseObjects:
+  - {fileID: 4300008, guid: ed354c5a3728a514fa0fea1ef31c9f0f, type: 3}
+  middleObjects:
+  - {fileID: 4300012, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  - {fileID: 4300014, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  - {fileID: 4300002, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  topObjects:
+  - {fileID: 4300004, guid: ed354c5a3728a514fa0fea1ef31c9f0f, type: 3}
+  colourScheme1:
+  - {fileID: 2100008, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  - {fileID: 2100010, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  colourScheme2:
+  - {fileID: 2100008, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  - {fileID: 2100010, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  colourScheme3:
+  - {fileID: 2100008, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  - {fileID: 2100010, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  accent: {fileID: 2100004, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  neon: {fileID: 2100014, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  interior:
+  - {fileID: 2100006, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  - {fileID: 2100008, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  maxHeight: 5

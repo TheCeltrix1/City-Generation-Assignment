@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4457746727350932555}
   - component: {fileID: 2623302442992667904}
   - component: {fileID: 7000179331170339639}
-  - component: {fileID: -47930858721527243}
   m_Layer: 0
   m_Name: Building Prefab
   m_TagString: Untagged
@@ -52,6 +51,11 @@ MonoBehaviour:
   thisObj: {fileID: 3145880488716411293}
   centreMaterial: {fileID: 0}
   scale: 2
+  rotation: {x: 0, y: 0, z: 0, w: 0}
+  posX: 0
+  posY: 0
+  posZ: 0
+  maxHeight: 0
 --- !u!33 &4457746727350932555
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -111,19 +115,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 0}
---- !u!208 &-47930858721527243
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3145880488716411293}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 0
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5

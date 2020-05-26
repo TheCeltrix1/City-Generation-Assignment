@@ -13,18 +13,24 @@ MonoBehaviour:
   m_Name: BasicBuilding
   m_EditorClassIdentifier: 
   baseObjects:
-  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 4300010, guid: ed354c5a3728a514fa0fea1ef31c9f0f, type: 3}
   middleObjects:
-  - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 4300018, guid: ed354c5a3728a514fa0fea1ef31c9f0f, type: 3}
+  - {fileID: 4300020, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
   topObjects:
-  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 4300016, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
   colourScheme1:
-  - {fileID: 2100000, guid: 86ae082780674754c87bf06db59a75f1, type: 2}
-  - {fileID: 2100000, guid: 5356e75849c4a3641be958760bf69b11, type: 2}
+  - {fileID: 2100010, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  - {fileID: 2100008, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
   colourScheme2:
-  - {fileID: 2100000, guid: a0e64488f3f620a419f4d0bc85dc2a51, type: 2}
-  - {fileID: 2100000, guid: 8fc8c55086fe63c4ab2f6f0fa7a5f16e, type: 2}
+  - {fileID: 2100010, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  - {fileID: 2100008, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
   colourScheme3:
-  - {fileID: 2100000, guid: 7fd09b69bf9bf5c408aff7b267e1308f, type: 2}
-  - {fileID: 2100000, guid: 6250b9e910cd9df459458b5742813563, type: 2}
+  - {fileID: 2100010, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  - {fileID: 2100008, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  accent: {fileID: 2100004, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  neon: {fileID: 2100002, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  interior:
+  - {fileID: 2100006, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
+  - {fileID: 2100012, guid: 2e053ef569b56e64c975f9224bc89d21, type: 3}
   maxHeight: 4

@@ -1,32 +1,70 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
+using UnityEngine.SceneManagement;
 
 public class PlayerEquipment : MonoBehaviour
 {
+    #region Variables
     private int _powerUp;
 
     private Rigidbody _body;
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController _fpc;
+    private GameObject _cannie;
 
     //PowerUps
-    public bool invisible;
+    public static bool invisible;
 
     private RaycastHit _hit;
     private bool _grapple = false;
     private float _invisibleTimer;
+    private float _invisibleTime = 10;
+    private float _invisibleDuration = 5;
     private float _invisibleCooldown;
+    private Slider _invisibleCanvasValue;
+
+    private int _ammo = 6;
+    private Text _ammoCount;
     private bool _invisibleReady;
+    private Mesh _endMesh;
+    #endregion
 
     void Start()
     {
-        _powerUp = Random.Range(0,2);
-        _body = this.GetComponentInParent<Rigidbody>();
-        _fpc = this.GetComponentInParent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+        _cannie = GameObject.Find("Canvas");
+        _powerUp = Random.Range(0,3);
+        _body = this.GetComponent<Rigidbody>();
+        _fpc = this.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         //random power up selection;
-        _powerUp = Random.Range(0,1);
+        //_powerUp = Random.Range(1,2);
+        _endMesh = /*MANAGER.CityManager.Instance.endPoint*/ null;
+        switch (_powerUp)
+        {
+            case 0:
+                _cannie.transform.GetChild(1).gameObject.SetActive(true);
+                _cannie.transform.GetChild(2).gameObject.SetActive(false);
+                _cannie.transform.GetChild(3).gameObject.SetActive(false);
+                break;
+
+            case 1:
+                _cannie.transform.GetChild(1).gameObject.SetActive(false);
+                _cannie.transform.GetChild(2).gameObject.SetActive(true);
+                _cannie.transform.GetChild(3).gameObject.SetActive(false);
+                _ammoCount = _cannie.transform.GetChild(2).GetChild(0).GetComponent<Text>();
+                _ammoCount.text = "Ammo: " + _ammo;
+                break;
+
+            case 2:
+                _cannie.transform.GetChild(1).gameObject.SetActive(false);
+                _cannie.transform.GetChild(2).gameObject.SetActive(false);
+                _cannie.transform.GetChild(3).gameObject.SetActive(true);
+                _invisibleCanvasValue = _cannie.transform.GetChild(3).GetChild(0).GetComponent<Slider>();
+                _invisibleCanvasValue.maxValue = _invisibleTime;
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -47,24 +85,26 @@ public class PlayerEquipment : MonoBehaviour
                 case 2:
                     Invisible();
                     break;
-                }
+            }
         }
     }
 
     private void FixedUpdate()
     {
-        if (_grapple)
+        if (_grapple && _powerUp == 0)
         {
             StartCoroutine("Grappling", _hit);
         }
-        if (invisible)
+        if (invisible && _powerUp == 2)
         {
             StartCoroutine("InvisibleTimer");
         }
-        if (!invisible && !_invisibleReady)
+        else if (!invisible && !_invisibleReady && _powerUp == 2)
         {
+            //Debug.Log("awlifnpiowanopiw");
             _invisibleCooldown += Time.deltaTime;
-            if (_invisibleCooldown >= 10)
+            _invisibleCanvasValue.value = _invisibleCooldown;
+            if (_invisibleCooldown >= _invisibleTime)
             {
                 _invisibleCooldown = 0;
                 _invisibleReady = true;
@@ -74,11 +114,17 @@ public class PlayerEquipment : MonoBehaviour
 
     private void SleepDart()
     {
-        if (Physics.Raycast(this.transform.position, Camera.main.transform.forward * 1000, out _hit, 50))
+        if (_ammo > 0)
         {
-            if (_hit.transform.gameObject.GetComponent<Enemy>())
+            _ammo--;
+            _ammoCount.text = "Ammo: " + _ammo;
+            if (Physics.Raycast(this.transform.position, Camera.main.transform.forward * 1000, out _hit, 50))
             {
-                _hit.transform.gameObject.GetComponent<Enemy>().drugged = true;
+                if (_hit.transform.gameObject.GetComponent<Enemy>())
+                {
+                    _hit.transform.gameObject.GetComponent<Enemy>().drugged = true;
+                    _hit.transform.gameObject.GetComponent<Enemy>().drugTimer = 0;
+                }
             }
         }
     }
@@ -101,6 +147,17 @@ public class PlayerEquipment : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<MeshFilter>()) {
+            if (collision.gameObject.tag == "EndPoint")
+            {
+                Cursor.visible = true;
+                SceneManager.LoadSceneAsync(0);
+            }
+        }
+    }
+
     IEnumerator Grappling(RaycastHit hit)
     {
         if (Vector3.Distance(this.transform.position,hit.point) <= 1f)
@@ -114,7 +171,8 @@ public class PlayerEquipment : MonoBehaviour
     IEnumerator InvisibleTimer()
     {
         _invisibleTimer += Time.deltaTime;
-        if (_invisibleTimer >= 5)
+        _invisibleCanvasValue.value = _invisibleCanvasValue.maxValue - (_invisibleTimer * (_invisibleTime / _invisibleDuration));
+        if (_invisibleTimer >= _invisibleDuration)
         {
             _invisibleTimer = 0;
             invisible = false;

@@ -13,5 +13,9 @@ public class BuildObject : ScriptableObject
     public Material[] colourScheme2;
     public Material[] colourScheme3;
 
+    public Material accent;
+    public Material neon;
+    public Material[] interior;
+
     public int maxHeight;
 }

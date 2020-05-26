@@ -8,20 +8,24 @@ namespace MANAGER
     {
         #region Variables
         public GameObject[] buildings;
+        public BuildObject[] buildObjects;
+
         //public static GameObject[] roadsToBuild ;   create list
-        public static bool[,,] floorOccupied = new bool[50, 15, 50];
+        public static bool[,,] floorOccupied = new bool[10, 10, 10];
         private int[,] floorGrayScale = new int[floorOccupied.GetLength(0), floorOccupied.GetLength(2)];
         private bool[,] _columnBuilt = new bool[floorOccupied.GetLength(0), floorOccupied.GetLength(2)];
-        public static int size = 6;
+        public static bool finishedIteration = false;
+        public static int size = 20;
         private static int _x;
         private static int _z;
         private static int _y;
         public GameObject roadF;
         public GameObject roadS;
         private float _testYSize;
+        private float _testSizeS;
         private static CityManager _instance;
 
-        public GameObject endPoint;
+        public Mesh endPoint;
         public static bool endPointSpawn = false;
         private Quaternion roadRotation;
 
@@ -34,6 +38,10 @@ namespace MANAGER
         private Vector2 _gridOffset;
         private Texture2D _perlinTexture;
         public GameObject navMeshHolder;
+
+        //AI generation
+        public GameObject enemyPrefab;
+        private LayerMask _ignoreBuildings;
         #endregion
         #region Singleton
         void OnEnable()
@@ -59,11 +67,25 @@ namespace MANAGER
 
         void Start()
         {
+            _ignoreBuildings = 1 << 9;
+            _ignoreBuildings = ~_ignoreBuildings;
             _testYSize = roadF.transform.lossyScale.y / 2;
+            _testSizeS = roadS.transform.lossyScale.y / 2;
             //generate perlin noise and ascribe it to buildings height
             PerlinNoise();
             Generate();
-            navMeshHolder.GetComponent<UnityEngine.AI.NavMeshSurface>().BuildNavMesh();
+            CreateAI();
+            //needs to be called once all buildings are generated with their meshes.
+            //navMeshHolder.GetComponent<UnityEngine.AI.NavMeshSurface>().BuildNavMesh();
+        }
+
+        private void Update()
+        {
+            if (finishedIteration)
+            {
+                navMeshHolder.GetComponent<UnityEngine.AI.NavMeshSurface>().BuildNavMesh();
+                finishedIteration = false;
+            }
         }
 
         #region Perlin Generation
@@ -119,18 +141,16 @@ namespace MANAGER
                 Collider[] col = Physics.OverlapBox(new Vector3((xPos * size), (y * size), (zPos * size)), new Vector3(size / 2, size / 2, size / 2));
                 foreach (Collider objects in col)
                 {
-                    if (!floorOccupied[x, y, z] || objects.gameObject.tag != "Player")
+                    if (!floorOccupied[x, y, z] && objects.gameObject.tag != "Player")
                     {
-                        floorOccupied[x, y, z] = true;
+                        //floorOccupied[x, y, z] = true;
                     }
                 }
                 if ((x == 0 || z == 0 || x == floorOccupied.GetLength(0) - 1 || z == floorOccupied.GetLength(2) - 1) && floorGrayScale[x, z] >= 0)
                 {
                     Build(xPos, yPos, zPos, x, y, z, floorOccupied.GetLength(1) - 1);
                     floorOccupied[x, y, z] = true;
-                    //floorGrayScale[x, z] = -1;
                 }
-
                 else if (!floorOccupied[x, y, z])
                 {
                     if (floorGrayScale[x, z] >= 3)
@@ -139,29 +159,29 @@ namespace MANAGER
                         {
                             Build(xPos, yPos, zPos, x, 1, z, floorGrayScale[x, z]);
                         }
-                        else Build(xPos, yPos, zPos, x, floorGrayScale[x, z] - 2, z, floorGrayScale[x, z]);
-
-                        floorOccupied[x, y, z] = true;
-                        //floorGrayScale[x, z] = -1;
+                        else
+                        {
+                            Build(xPos, yPos, zPos, x, floorGrayScale[x, z] - 2, z, floorGrayScale[x, z]);
+                        }
                     }
 
                     else if (floorGrayScale[x, z] == 2)
                     {
                         RoadAngle(x, z);
-                        floorOccupied[x, y, z] = true;
+                        _columnBuilt[x, z] = true;
                     }
 
-                    else if (floorGrayScale[x, z] == 1 || floorGrayScale[x, z] == 0)
+                    /*else if (floorGrayScale[x, z] == 1 || floorGrayScale[x, z] == 0)
                     {
-                        //floorGrayScale[x, z] = -1;
-                        //GameObject prefab = Instantiate(roadF, new Vector3((xPos * size), (1f - _testYSize) * (float)size, (zPos * size)), Quaternion.identity);
+                        //GameObject prefab = Instantiate(roadF, new Vector3(((x - _x) * size), (0f - _testYSize) * (float)size, ((z - _z) * size)), Quaternion.Euler(new Vector3(0, 0, 0)));
                         //prefab.transform.localScale = prefab.transform.localScale * size;
-                        floorOccupied[x, y, z] = true;
-                    }
+                        //AISpawning(xPos, yPos, zPos);
+                    }*/
+
                 }
                 GameObject ofwo = Instantiate(roadF, new Vector3((xPos * size), (-_testYSize) * (float)size, (zPos * size)), Quaternion.identity);
                 ofwo.transform.localScale = ofwo.transform.localScale * size;
-
+                floorOccupied[x, y, z] = true;
                 _columnBuilt[x, z] = true;
             }
         }
@@ -184,6 +204,7 @@ namespace MANAGER
             GameObject build = buildings[Random.Range(0, buildings.Length)];
             GameObject con = Instantiate(build, new Vector3((xPos * size), (y * size), (zPos * size)), (Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0,((int)Random.Range(0,3)) * 90,0))));
             BuildingScript bs = con.GetComponent<BuildingScript>();
+            bs.structures = buildObjects[Random.Range(0,buildObjects.Length)];
             bs.posX = x;
             bs.posY = y;
             bs.posZ = z;
@@ -211,6 +232,8 @@ namespace MANAGER
             int i3 = floorGrayScale[x, z + 1];
             int i4 = floorGrayScale[x, z - 1];
 
+            floorOccupied[x, 2, z] = true;
+
             if (i1 >= 2 && i2 >= 2 && i3 >= 2 && i4 >= 2)
             {
                 GameObject prefab = Instantiate(roadF, new Vector3(((x - _x) * size), (1f - _testYSize) * (float)size, ((z - _z) * size)), Quaternion.identity);
@@ -229,22 +252,22 @@ namespace MANAGER
                     {
                         if (i1 <= 1)
                         {
-                            GameObject prefab = Instantiate(roadS, new Vector3(((x - _x) * size), (1f-_testYSize) * (float)size, ((z - _z) * size)), Quaternion.Euler(new Vector3(0,0,0)));
+                            GameObject prefab = Instantiate(roadS, new Vector3(((x - _x) * size), (1f/2f) * (float)size, ((z - _z) * size)), Quaternion.Euler(new Vector3(0,180,0)));
                             prefab.transform.localScale = prefab.transform.localScale * size;
                         }
                         else if (i3 <= 1)
                         {
-                            GameObject prefab = Instantiate(roadS, new Vector3(((x - _x) * size), (1f-_testYSize) * (float)size, ((z - _z) * size)), Quaternion.Euler(new Vector3(0, 270, 0)));
+                            GameObject prefab = Instantiate(roadS, new Vector3(((x - _x) * size), (1f/2f) * (float)size, ((z - _z) * size)), Quaternion.Euler(new Vector3(0, 90, 0)));
                             prefab.transform.localScale = prefab.transform.localScale * size;
                         }
                         else if (i2 <= 1)
                         {
-                            GameObject prefab = Instantiate(roadS, new Vector3(((x - _x) * size), (1f - _testYSize) * (float)size, ((z - _z) * size)), Quaternion.Euler(new Vector3(0, -180, 0)));
+                            GameObject prefab = Instantiate(roadS, new Vector3(((x - _x) * size), (1f/2f) * (float)size, ((z - _z) * size)), Quaternion.Euler(new Vector3(0, 0, 0)));
                             prefab.transform.localScale = prefab.transform.localScale * size;
                         }
                         else if (i4 <= 1)
                         {
-                            GameObject prefab = Instantiate(roadS, new Vector3(((x - _x) * size), (1f-_testYSize) * (float)size, ((z - _z) * size)), Quaternion.Euler(new Vector3(0, 90, 0)));
+                            GameObject prefab = Instantiate(roadS, new Vector3(((x - _x) * size), (1f/2f) * (float)size, ((z - _z) * size)), Quaternion.Euler(new Vector3(0, 270, 0)));
                             prefab.transform.localScale = prefab.transform.localScale * size;
                         }
                     }
@@ -256,6 +279,34 @@ namespace MANAGER
                 }
             }
             //floorGrayScale[x, z] = -1;
+        }
+
+        private void CreateAI()
+        {
+            for (int q = 0; q < floorOccupied.GetLength(0); q++)
+            {
+                for (int p = 0; p < floorOccupied.GetLength(2); p++)
+                {
+                    //Debug.Log(q + " " + p + " " + floorOccupied[q, 2, p]);
+                    if (floorOccupied[q, 2, p] && Random.Range(0, 3) == 0)
+                    {
+                        AISpawning(q, 1, p);
+                    }
+                }
+            }
+        }
+
+        private void AISpawning(int x, int y, int z)
+        {
+            GameObject enemy = Instantiate(enemyPrefab, new Vector3(((x - _x) * size), (y - _testYSize) * size, ((z - _z) * size)),Quaternion.identity);
+            Enemy enie = enemy.GetComponent<Enemy>();
+            enie.mask = _ignoreBuildings;
+
+            int tempX = (Random.Range(0, floorOccupied.GetLength(0) - 1) - _x);
+            float tempY = y - _testYSize;
+            int tempZ = (Random.Range(0, floorOccupied.GetLength(2) - 1) - _z);
+
+            enie.secondaryTarget = new Vector3(tempX * size, tempY * size, tempZ * size);
         }
     }
 }
