@@ -13,7 +13,7 @@ public class FakeCity : MonoBehaviour
         int kid = 0;
         while (kid < this.transform.childCount)
         {
-            //this.transform.GetChild(kid).GetComponent<BuildingScript>().Build();
+            this.transform.GetChild(kid).GetComponent<BuildingScript>().Build();
             //kiddies[0] = this.transform.GetChild(kid);
             kid++;
         }

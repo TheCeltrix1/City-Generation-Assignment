@@ -14,6 +14,7 @@ public class BuildingScript : MonoBehaviour
     public int posX;
     public int posY;
     public int posZ;
+    public int maxHeight;
 
     private Renderer myRenderer;
     private Material myMaterial;
@@ -24,7 +25,6 @@ public class BuildingScript : MonoBehaviour
 
     private void Generate()
     {
-        //Debug.Log(posX + " " + posY + " " + posZ);
         _manager = FindObjectOfType<MANAGER.CityManager>();
         myRenderer = this.GetComponent<MeshRenderer>();
         myMesh = this.GetComponent<MeshFilter>();
@@ -45,7 +45,7 @@ public class BuildingScript : MonoBehaviour
             CreateTile();
             Destroy(this);
         }
-        else if (currentHeight < structures.maxHeight)
+        else if (currentHeight < maxHeight)
         {
             objVal = structures.middleObjects.Length;
             matNum = structures.colourScheme2.Length;
@@ -62,17 +62,33 @@ public class BuildingScript : MonoBehaviour
             CreateTile();
             Destroy(this);
         }
-        else if (currentHeight == structures.maxHeight)
+        else if (currentHeight == maxHeight)
         {
             objVal = structures.topObjects.Length;
             matNum = structures.colourScheme3.Length;
-            myMesh.mesh = structures.topObjects[Random.Range(0, objVal)];
-            myMaterial = structures.colourScheme3[Random.Range(0, matNum)];
+
+            if(Random.Range(0, 20) <= 1 && !MANAGER.CityManager.endPointSpawn)
+            {
+                if ((posX > 0 && posZ > 0 && posX < MANAGER.CityManager.floorOccupied.GetLength(0) - 1 && posZ < MANAGER.CityManager.floorOccupied.GetLength(2) - 1))
+                MANAGER.CityManager.endPointSpawn = true;
+                myMesh.mesh = MANAGER.CityManager.Instance.endPoint;
+                myMaterial = structures.neon;
+                this.gameObject.tag = "EndPoint";
+                Debug.Log("endgoal " + posX + " " + posY + " " + posZ);
+            }
+            else
+            {
+                myMesh.mesh = structures.topObjects[Random.Range(0, objVal)];
+                myMaterial = structures.colourScheme3[Random.Range(0, matNum)];
+            }
+
             this.transform.rotation = rotation;
             CreateTile();
+            if(myMesh.mesh.name == "pSphere1 Instance" || myMesh.mesh.name == "pSphere2 Instance") this.transform.position = this.transform.position - new Vector3(0, (myMesh.mesh.bounds.size.y / 2), 0);
+            else this.transform.position = this.transform.position - new Vector3(0, (myMesh.mesh.bounds.size.y / 8), 0);
             Destroy(this);
         }
-        else if (currentHeight > structures.maxHeight)
+        else if (currentHeight > maxHeight)
         {
             Destroy(this.gameObject);
         }
@@ -81,27 +97,38 @@ public class BuildingScript : MonoBehaviour
     private void CreateTile()
     {
         Mesh();
-        //this.GetComponent<Rigidbody>().mass = scale * .75f;
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + (myMesh.mesh.bounds.size.y/2), this.transform.position.z);
         MeshCollider meshCol = this.GetComponent<MeshCollider>();
         meshCol.enabled = true;
         meshCol.sharedMesh = myMesh.mesh;
-        meshCol.convex = true;
+        meshCol.convex = false;
+
+        //fix materials
         myRenderer.material = myMaterial;
+        Material[] matMesh = new Material[myMesh.mesh.subMeshCount];
+        for(int x = 0; x < matMesh.Length; x ++)
+        {
+            if (x == 0) matMesh[x] = structures.accent;
+            if (x == 1) matMesh[x] = myMaterial;
+            if (x == 2) matMesh[x] = structures.interior[Random.Range(0,structures.interior.Length)];
+            if (x == 3) matMesh[x] = structures.neon;
+            if (x == 4) matMesh[x] = structures.neon;
+        }
+        myRenderer.materials = matMesh;
         NextTile(thisObj);
     }
 
     private void Mesh()
     {
         _vertices = myMesh.mesh.vertices;
-        float meshScale = 1/myMesh.mesh.bounds.size.y;
+        float meshScale = 1/myMesh.mesh.bounds.size.x;
         var vertices = new Vector3[_vertices.Length];
 
         for (var i = 0; i < vertices.Length; i++)
         {
             var vertex = _vertices[i];
             vertex.x = vertex.x * scale * meshScale;
-            vertex.y = vertex.y * scale * meshScale;
+            vertex.y = vertex.y * scale * 1 / myMesh.mesh.bounds.size.y;
             vertex.z = vertex.z * scale * meshScale;
 
             vertices[i] = vertex;
@@ -114,7 +141,7 @@ public class BuildingScript : MonoBehaviour
 
     private void NavObj()
     {
-        this.GetComponent<NavMeshObstacle>().size = myMesh.mesh.bounds.size;
+        //this.GetComponent<NavMeshObstacle>().size = myMesh.mesh.bounds.size;
     }
 
     private void NextTile(GameObject obj)
@@ -138,6 +165,7 @@ public class BuildingScript : MonoBehaviour
         }
         else
         {
+            if (posX == MANAGER.CityManager.floorOccupied.GetLength(0) - 1 && posZ == MANAGER.CityManager.floorOccupied.GetLength(2) - 1) MANAGER.CityManager.finishedIteration = true;
             Destroy(this);
         }
     }

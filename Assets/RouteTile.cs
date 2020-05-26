@@ -9,7 +9,7 @@ namespace MANAGER
 
         #region Fields
 
-        public int recursionCount = 0;
+        public static int recursionCount = 0;
         private int mySlope; //is current tile a slope up (1), a downslope (-1) or a flat segment
         private int myRotation;
         private int level;
@@ -32,11 +32,11 @@ namespace MANAGER
 
         #region Methods
 
-        public void Initialize(int recCount, int slope, int rotationDeg)
+        public void Initialize(int slope, int rotationDeg)
         {
-            recursionCount = recCount;
             mySlope = slope;
             myRotation = rotationDeg;
+            Run();
         }
 
         public void SetIncrements(int degrees, int slope)
@@ -78,9 +78,9 @@ namespace MANAGER
             inc_x = inc_y = inc_z = 0;
         }
 
-        void Start()
+        public void Run()
         {
-            int x = Mathf.RoundToInt(CityManager.floorOccupied.GetLength(0)/2 + (transform.position.x / CityManager.size));
+            /*int x = Mathf.RoundToInt(CityManager.floorOccupied.GetLength(0)/2 + (transform.position.x / CityManager.size));
             int y = Mathf.RoundToInt((transform.position.y / CityManager.size));
             if (mySlope == -1) y = Mathf.RoundToInt((transform.position.y / CityManager.size) - 1);
             int z = Mathf.RoundToInt(CityManager.floorOccupied.GetLength(2)/2 + (transform.position.z / CityManager.size));
@@ -92,15 +92,17 @@ namespace MANAGER
                 {
                     SetIncrements(nextRotation, 0);
 
+                    //Debug.Log("Before");
                     PlaceBlock(0, nextRotation, x, y, z);
+                    //Debug.Log("After");
                 }
 
             }
             else if (recursionCount < maxLevel)
             {
-                int corrector = (maxLevel - recursionCount) / 15;  //biasing randomization in the beginning to avoid extinction
+                int corrector = (maxLevel - recursionCount) / 15;
                 int random = Random.Range(0, 100);
-                if (random < (80 + corrector))                //move forward (most likely):
+                if (random < (80 + corrector))
                 {
                     int nextRotation = myRotation;
 
@@ -141,7 +143,7 @@ namespace MANAGER
                     SetIncrements(nextRotation, 0);
                     PlaceBlock(0, nextRotation, x, y, z);
                 }
-            }
+            }*/
             MeshFilter mesh = this.GetComponent<MeshFilter>();
             switch (mySlope)
             {
@@ -169,16 +171,15 @@ namespace MANAGER
             //Debug.Log(CityManager.CheckTile(x + inc_x, y + inc_y, z + inc_z));
             if (CityManager.CheckTile(x + inc_x, y + inc_y, z + inc_z) == false)
             {
-                //Debug.Log("should be built");
                 CityManager.floorOccupied[x + inc_x, y + inc_y, z + inc_z] = true;
                 child = Instantiate(tilePrefab, transform.position + (incVector * CityManager.size), nextQuat);
-                //Debug.Log(child + "Built");
                 child.parent = this.transform;
-                child.GetComponent<RouteTile>().Initialize(recursionCount + 1, slope, nextRotation);
+                child.GetComponent<RouteTile>().Initialize(slope, nextRotation);
+                recursionCount++;
             }
-            else if(recursionCount >= maxLevel * 0.1f)
+            else if(recursionCount > 0)
             {
-                Destroy(this.gameObject);
+                Destroy(this);
             }
         }
 
